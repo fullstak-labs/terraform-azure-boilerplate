@@ -5,7 +5,6 @@ terraform {
       version = "~> 2.65"
     }
   }
-
   required_version = ">= 0.14.9"
 }
 
@@ -21,4 +20,15 @@ resource "azurerm_resource_group" "rg" {
     Environment = "dev"
     Team        = "flab"
   }
+}
+
+
+resource "azurerm_api_management" "fblab-apim" {
+  name                = var.apim_name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  publisher_name      = var.apim_publisher_name
+  publisher_email     = var.apim_publisher_email
+
+  sku_name = "Developer_1"
 }
