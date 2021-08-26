@@ -1,3 +1,3 @@
-output "app_geolocation_api_module_outputs" {
-  value = module.app_geolocation_api.app_details
+output "app_client_externalApp01_module_outputs" {
+  value = module.app_client_externalApp01.app_details
 }

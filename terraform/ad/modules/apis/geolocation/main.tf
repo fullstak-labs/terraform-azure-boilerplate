@@ -8,6 +8,9 @@ resource "random_string" "password" {
 resource "azuread_application" "geolocation_api" {
   display_name    = var.app_name
   identifier_uris = ["api://${var.app_name}"]
+  available_to_other_tenants = false
+  oauth2_allow_implicit_flow = false
+  type                       = "webapp/api"
   owners          = [data.azuread_client_config.current.object_id]
 }
 
@@ -22,9 +25,8 @@ resource "azuread_application_app_role" "geolocation_api" {
   value                 = each.value.value
 }
 
-
-resource "azuread_application_password" "geolocation_api" {
-  application_object_id = azuread_application.geolocation_api.object_id
-  value                 = random_string.password.result
-  end_date              = "2022-01-01T01:02:03Z"
+resource "azuread_service_principal" "geolocation_api" {
+  application_id               = azuread_application.geolocation_api.application_id
+  app_role_assignment_required = false
+  tags = [ "geolocation", "api"]
 }
