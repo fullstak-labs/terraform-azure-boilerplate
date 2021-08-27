@@ -1,0 +1,229 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "The geographic location API provides a standardized client interface to a location management system.",
+    "version": "1.0.0",
+    "title": "API GeographicLocation"
+  },
+
+  "host": "serverRoot",
+  "basePath": "/geographicLocation/v1/",
+  "schemes": ["https"],
+  "consumes": ["application/json;charset=utf-8"],
+  "produces": ["application/json;charset=utf-8"],
+  "tags": [
+    {
+      "name": "GeographicLocation",
+      "description": ""
+    },
+    {
+      "name": "Geolocation",
+      "description": ""
+    }
+  ],
+  "paths": {
+    "/geographicLocation": {
+      "get": {
+        "tags": ["GeographicLocation"],
+        "operationId": "geographicLocationFind",
+        "summary": "List geographic locations",
+        "description": "This operation list geographic location entities.",
+        "deprecated": false,
+        "parameters": [
+          {
+            "name": "fields",
+            "required": false,
+            "in": "query",
+            "description": "Attribute selection",
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "description": "Requested index to start of resources to be provided in response requested by client",
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Requested number of resources to be provided in response requested by client",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GeographicLocation"
+              }
+            },
+            "headers": {
+              "X-Total-Count": {
+                "description": "Total number of items matching criteria",
+                "type": "integer",
+                "format": "int32"
+              },
+              "X-Result-Count": {
+                "description": "Actual number of items returned in the response body",
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\n\nList of supported error codes:\n- 20: Invalid URL parameter value\n- 21: Missing body\n- 22: Invalid body\n- 23: Missing body field\n- 24: Invalid body field\n- 25: Missing header\n- 26: Invalid header value\n- 27: Missing query-string parameter\n- 28: Invalid query-string parameter value",
+            "schema": {
+              "$ref": "#/definitions/ErrorRepresentation"
+            }
+          },
+          "404": {
+            "description": "Not Found\n\nList of supported error codes:\n- 60: Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorRepresentation"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed\n\nList of supported error codes:\n- 61: Method not allowed",
+            "schema": {
+              "$ref": "#/definitions/ErrorRepresentation"
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity\n\nFunctional error",
+            "schema": {
+              "$ref": "#/definitions/ErrorRepresentation"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error\n\nList of supported error codes:\n- 1: Internal error",
+            "schema": {
+              "$ref": "#/definitions/ErrorRepresentation"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ErrorRepresentation": {
+      "description": "Standard tmf error representation",
+
+      "required": ["code", "reason"],
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Application related code (as defined in the API or from a common list)",
+          "type": "integer"
+        },
+        "reason": {
+          "description": "Text that explains the reason for error. This can be shown to a client user.",
+          "type": "string"
+        },
+        "message": {
+          "description": "Text that provides more details and corrective actions related to the error. This can be shown to a client user.",
+          "type": "string"
+        },
+        "status": {
+          "description": "http error code extension like 400-2",
+          "type": "string"
+        },
+        "referenceError": {
+          "description": "url ponting to documentation describing the error",
+          "type": "string"
+        },
+        "@type": {
+          "description": "Type of the REST resource",
+          "type": "string"
+        },
+        "@schemaLocation": {
+          "description": "Link to the schema describing the REST resource",
+          "type": "string"
+        }
+      }
+    },
+
+    "GeographicPoint": {
+      "description": "A GeoPoint defines a geographic point through coordinates",
+
+      "required": ["x", "y"],
+      "type": "object",
+      "properties": {
+        "x": {
+          "description": "x coordinate (usually latitude)",
+          "example": "-7.2248262",
+          "type": "string"
+        },
+        "y": {
+          "description": "y coordinate (usually longitude)",
+          "example": "-35.8895742",
+          "type": "string"
+        },
+        "z": {
+          "description": "z coordinate (usually elevation)",
+          "example": "19.72z",
+          "type": "string"
+        }
+      }
+    },
+
+    "GeographicLocation": {
+      "description": "Structured textual way of describing a geographic location. A geographic location allows describing through coordinate(s), a point, a line or a space.",
+
+      "required": [
+        "name",
+        "geometryType",
+        "spatialRef",
+        "accuracy",
+        "geometry"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Unique identifier of the geographic location",
+          "example": "1250",
+          "type": "string"
+        },
+        "href": {
+          "description": "An URI used to access to the geographic location resource",
+          "example": "/v1/geographicLocation/",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the geo location",
+          "example": "Parque do Povo",
+          "type": "string"
+        },
+        "geometryType": {
+          "description": "Type of the geographic location - one of: point, line, graph, ring polygon",
+          "example": "point",
+          "type": "string"
+        },
+        "spatialRef": {
+          "description": "Geocoding referential",
+          "example": "BR-PB",
+          "type": "string"
+        },
+        "accuracy": {
+          "description": "Accuracy of the coordinate specified",
+          "example": "1",
+          "type": "string"
+        },
+        "geometry": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GeographicPoint"
+          }
+        },
+        "@baseType": {
+          "description": "Indicates the base type of the resource. Here can be 'geographicLocation'.",
+          "example": "geographicLocation",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

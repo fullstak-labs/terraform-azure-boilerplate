@@ -1,17 +1,17 @@
 terraform {
   required_providers {
-    azuread = {
-      source  = "hashicorp/azuread"
-      version = "~> 1.6.0"
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 2.65"
     }
   }
+  required_version = ">= 0.14.9"
 }
 
-module "app_geolocation_api" {
-  source = "./modules/apis/geolocation"
+provider "azurerm" {
+  features {}
 }
 
-module "app_client_externalApp01" {
-  source         = "./modules/clients/externalApp01"
-  app_details = module.app_geolocation_api.app_details
+module "geolocation_api" {
+  source = "./apis/geolocation"
 }
