@@ -8,10 +8,10 @@ terraform {
 }
 
 module "app_geolocation_api" {
-  source = "./modules/apis/geolocation"
+  source = "./apps/backendApps/geolocation"
 }
 
 module "app_client_externalApp01" {
-  source         = "./modules/clients/externalApp01"
+  source         = "./apps/clientApps/externalApp01"
   app_details = module.app_geolocation_api.app_details
 }
